@@ -25,9 +25,7 @@ namespace CxCE_Demo
             SqlCommand cmd = new SqlCommand();
             SqlDataReader reader;
 
-            cmd.CommandText = "SELECT NAME FROM Users WHERE ID = " + ID;
-            cmd.CommandType = CommandType.Text;
-            cmd.Connection = conn;
+            cmd.CommandText = "SELECT NAME FROM Users WHERE ID = @ID"; cmd.CommandType = CommandType.Text; cmd.Connection = conn; // Add parameter to the command cmd.Parameters.AddWithValue("@ID", ID);
 
             conn.Open();
 
@@ -35,7 +33,8 @@ namespace CxCE_Demo
             if (reader.HasRows)
             {
                 username = reader["NAME"].ToString();
-                age = getAge(username);
+                string san_username = AntiXss.HtmlEncode(username);
+                age = getAge(san_username);
             }
 
             message.Text = "Welcome " + username;
